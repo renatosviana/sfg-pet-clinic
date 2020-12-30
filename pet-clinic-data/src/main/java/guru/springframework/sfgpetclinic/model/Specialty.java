@@ -1,8 +1,6 @@
 package guru.springframework.sfgpetclinic.model;
 
-import com.fasterxml.jackson.databind.ser.Serializers;
-
-public class Specialty extends Serializers.Base {
+public class Specialty extends BaseEntity {
 
     private String description;
 
