@@ -1,17 +1,36 @@
 package guru.springframework.sfgpetclinic.model;
 
-import java.util.HashSet;
-import java.util.Set;
+import org.springframework.beans.support.MutableSortDefinition;
+import org.springframework.beans.support.PropertyComparator;
+
+import java.util.*;
 
 public class Vet extends Person {
 
-    private Set<Specialty> specialty = new HashSet<>();
+    private Set<Specialty> specialties;
 
-    public Set<Specialty> getSpecialty() {
-        return specialty;
+    protected Set<Specialty> getSpecialtiesInternal() {
+        if (this.specialties == null) {
+            this.specialties = new HashSet<>();
+        }
+        return this.specialties;
     }
 
-    public void setSpecialty(Set<Specialty> specialty) {
-        this.specialty = specialty;
+    protected void setSpecialtiesInternal(Set<Specialty> specialties) {
+        this.specialties = specialties;
+    }
+
+    public List<Specialty> getSpecialties() {
+        List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());
+        PropertyComparator.sort(sortedSpecs, new MutableSortDefinition("name", true, true));
+        return Collections.unmodifiableList(sortedSpecs);
+    }
+
+    public int getNrOfSpecialties() {
+        return getSpecialtiesInternal().size();
+    }
+
+    public void addSpecialty(Specialty specialty) {
+        getSpecialtiesInternal().add(specialty);
     }
 }
