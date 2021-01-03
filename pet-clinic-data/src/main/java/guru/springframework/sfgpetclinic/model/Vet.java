@@ -3,10 +3,17 @@ package guru.springframework.sfgpetclinic.model;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 
+import javax.persistence.*;
 import java.util.*;
 
+@Entity
+@Table(name="vets")
 public class Vet extends Person {
 
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(name="vet_specialty",
+            joinColumns = @JoinColumn(name="vet_id"),
+            inverseJoinColumns = @JoinColumn(name="specialty_id"))
     private Set<Specialty> specialties;
 
     protected Set<Specialty> getSpecialtiesInternal() {
