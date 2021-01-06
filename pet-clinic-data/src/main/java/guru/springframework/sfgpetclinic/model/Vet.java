@@ -1,11 +1,17 @@
 package guru.springframework.sfgpetclinic.model;
 
+import lombok.*;
 import org.springframework.beans.support.MutableSortDefinition;
 import org.springframework.beans.support.PropertyComparator;
 
 import javax.persistence.*;
 import java.util.*;
 
+@Setter
+@Getter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
 @Table(name="vets")
 public class Vet extends Person {
@@ -14,30 +20,6 @@ public class Vet extends Person {
     @JoinTable(name="vet_specialty",
             joinColumns = @JoinColumn(name="vet_id"),
             inverseJoinColumns = @JoinColumn(name="specialty_id"))
-    private Set<Specialty> specialties;
+    private Set<Specialty> specialties = new HashSet<>();
 
-    protected Set<Specialty> getSpecialtiesInternal() {
-        if (this.specialties == null) {
-            this.specialties = new HashSet<>();
-        }
-        return this.specialties;
-    }
-
-    protected void setSpecialtiesInternal(Set<Specialty> specialties) {
-        this.specialties = specialties;
-    }
-
-    public List<Specialty> getSpecialties() {
-        List<Specialty> sortedSpecs = new ArrayList<>(getSpecialtiesInternal());
-        PropertyComparator.sort(sortedSpecs, new MutableSortDefinition("name", true, true));
-        return Collections.unmodifiableList(sortedSpecs);
-    }
-
-    public int getNrOfSpecialties() {
-        return getSpecialtiesInternal().size();
-    }
-
-    public void addSpecialty(Specialty specialty) {
-        getSpecialtiesInternal().add(specialty);
-    }
 }
